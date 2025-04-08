@@ -1,5 +1,6 @@
 import express from 'express';
-import { logRequestsToConsole } from './utils/loggingUtils';
+
+import { logRequestsToConsole } from './utils/loggingUtils.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
