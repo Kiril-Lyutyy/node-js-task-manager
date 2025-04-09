@@ -27,6 +27,7 @@ export const createTask = async (task) => {
         ...task,
         id: generateTaskId(tasks),
         createdAt: new Date().toISOString(),
+        updatedAt: null,
     };
 
     await writeFile(tasksJsonPath, [...tasks, newTask]);

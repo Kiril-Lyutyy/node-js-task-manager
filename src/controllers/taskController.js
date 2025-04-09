@@ -1,3 +1,4 @@
+import { SORT_ASC } from '../constants/index.js';
 import {
     getAllTasks,
     getTaskById,
@@ -6,6 +7,7 @@ import {
     patchTaskStatus,
     deleteTask
 } from '../models/taskModel.js';
+import { sortTasks } from '../utils/dataUtils.js';
 import { ValidationError } from '../utils/validationErrors.js';
 import { validateTask, validateStatus } from '../utils/validationUtils.js';
 
@@ -37,22 +39,19 @@ export const handleGetAllTasks = async (req, res) => {
 
 export const handleGetSortedTasks = async (req, res) => {
     const sortBy = req.query.by;
-    const validFields = ['createdAt', 'updatedAt'];
+    const order = req.query.order ?? SORT_ASC;
 
-    if (!validFields.includes(sortBy)) {
-        res.status = 400;
+    try {
+        const tasks = await getAllTasks();
+        const sortedTasks = sortTasks(tasks, sortBy, order);
 
-        return res.json({ message: `Can only sort by: ${validFields.join(', ')}` });
+        res.statusCode = 200;
+        res.json(sortedTasks);
+    } catch (err) {
+        res.statusCode = 500;
+        res.json({ message: 'Error sorting tasks', error: err.message });
     }
-    
-    const tasks = await getAllTasks();
-    const sortedTasks = tasks.sort((a, b) => {
-        return new Date(a[sortBy]) - new Date(b[sortBy]);
-    });
-
-    res.status = 200;
-    res.json(sortedTasks);
-}
+};
 
 export const handleGetTaskById = async (req, res) => {
     const task = await getTaskById(req.params.id);
@@ -70,6 +69,7 @@ export const handleGetTaskById = async (req, res) => {
 export const handleCreateTask = handleWithValidation(async (req, res) => {
     validateTask(req.body);
     const task = await createTask(req.body);
+    
     res.statusCode = 201;
     res.json(task);
 })
