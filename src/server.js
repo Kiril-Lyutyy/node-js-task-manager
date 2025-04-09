@@ -1,5 +1,6 @@
 import express from 'express';
 
+import taskRoutes from './routes/taskRoutes.js'; 
 import { logRequestsToConsole } from './utils/loggingUtils.js';
 
 const app = express();
@@ -10,10 +11,7 @@ app.use((req, _, next) => {
   logRequestsToConsole(req);
   next();
 });
-
-app.get('/', (_, res) => {
-    res.send('Hello world!');
-})
+app.use('/api',taskRoutes);
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
