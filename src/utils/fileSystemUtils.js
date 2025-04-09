@@ -6,8 +6,7 @@ export const readFile = async (path, encoding = 'utf-8') => {
 
         return JSON.parse(fileData);
     } catch (err) {
-        //console.log(err.message ?? 'Unknown error occured');
-        throw new Error('Failed to read file');
+        throw new Error('Failed to read file', err.message ?? 'Unknown error');
     }
 }
 
@@ -15,7 +14,6 @@ export const writeFile = async (path, fileData) => {
     try {
         await fs.writeFile(path, JSON.stringify(fileData));
     } catch (err) {
-        //console.log(err.message ?? 'Unknown error occured');
-        throw new Error('Failed to write file');
+        throw new Error('Failed to write file: ', err.message ?? 'Unknown error');
     }
 }

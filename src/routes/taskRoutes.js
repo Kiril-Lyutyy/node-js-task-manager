@@ -3,7 +3,7 @@ import {
     handleCreateTask, 
     handleDeleteTask, 
     handleGetAllTasks, 
-    handleGetTask, 
+    handleGetTaskById, 
     handlePatchTask, 
     handleUpdateTask 
 } from '../controllers/taskController.js';
@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.get('/tasks', handleGetAllTasks);
-router.get('/tasks/:id', handleGetTask);
+router.get('/tasks/:id', handleGetTaskById);
 router.post('/tasks', handleCreateTask);
 router.put('/tasks/:id', handleUpdateTask);
 router.patch('/tasks/:id', handlePatchTask);

@@ -10,12 +10,14 @@ const tasksJsonPath = path.join(__dirname, '../../data/tasks.json');
 
 export const getAllTasks = async () => {
     const allTasks = await readFile(tasksJsonPath);
+
     return allTasks || [];
 };
 
 export const getTaskById = async (id) => {
     const tasks = await getAllTasks();
     const numericId = parseInt(id);
+
     return tasks.find(task => task.id === numericId);
 };
 
