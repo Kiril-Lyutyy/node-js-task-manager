@@ -3,6 +3,7 @@ import {
     handleCreateTask, 
     handleDeleteTask, 
     handleGetAllTasks, 
+    handleGetSortedTasks, 
     handleGetTaskById, 
     handlePatchTask, 
     handleUpdateTask 
@@ -10,11 +11,12 @@ import {
 
 const router = express.Router();
 
-router.get('/tasks', handleGetAllTasks);
+router.get('/tasks/sorted', handleGetSortedTasks);
 router.get('/tasks/:id', handleGetTaskById);
+router.get('/tasks', handleGetAllTasks);
 router.post('/tasks', handleCreateTask);
 router.put('/tasks/:id', handleUpdateTask);
-router.patch('/tasks/:id', handlePatchTask);
+router.patch('/tasks/:id/status', handlePatchTask);
 router.delete('/tasks/:id', handleDeleteTask);
 
 export default router;

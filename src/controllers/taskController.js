@@ -23,11 +23,35 @@ const handleWithValidation = (handler) => async (req, res, next) => {
     }
 };
 
-export const handleGetAllTasks = async (_, res) => {
-    const tasks = await getAllTasks();
+export const handleGetAllTasks = async (req, res) => {
+    const status = req.query.status;
+    let tasks = await getAllTasks();
+
+    if (status) {
+        tasks = tasks.filter(task => task.status === status.toLowerCase());
+    }
 
     res.statusCode = 200;
     res.json(tasks);
+}
+
+export const handleGetSortedTasks = async (req, res) => {
+    const sortBy = req.query.by;
+    const validFields = ['createdAt', 'updatedAt'];
+
+    if (!validFields.includes(sortBy)) {
+        res.status = 400;
+
+        return res.json({ message: `Can only sort by: ${validFields.join(', ')}` });
+    }
+    
+    const tasks = await getAllTasks();
+    const sortedTasks = tasks.sort((a, b) => {
+        return new Date(a[sortBy]) - new Date(b[sortBy]);
+    });
+
+    res.status = 200;
+    res.json(sortedTasks);
 }
 
 export const handleGetTaskById = async (req, res) => {
